@@ -1,3 +1,5 @@
+# https://pymotw.com/2/re/
+
 import re
 
 # re.search
@@ -145,6 +147,13 @@ def main():
 	# [a-zA-Z]+' --> sequences of lower or upper case letters
 	# [A-Z][a-z]+' --> one upper case letter followed by lower case letters
 	# . --> pattern should match any single character in that position
+	# Escape codes - are a compact representation for pre-defined character sets
+	# 	\d - a digit
+	#	\D - a non-digit
+	#	\w - alphanumeric (i.e. not only alphabets - it matches alphabets + numbers)
+	#	\w - non-alphanumeric
+	#	\s - whitespace (tab, space, newline)
+	#	\S - non-whitespace
 
 	print " === Example 8 === "
 	patterns = [
@@ -179,6 +188,145 @@ def main():
 	]
 	test_patterns(patterns, 'abbaaabbbbaaaaa')
 
+	print " === Example 12 === "
+
+	# Escapes are indicated by prefixing the character with a backslash (\).
+	# Unfortunately, a backslash must itself be escaped in normal Python strings,
+	# and that results in expressions that are difficult to read.
+	# Using raw strings, created by prefixing the literal value with r, for creating regular expressions
+	# eliminates this problem and maintains readability.
+
+	patterns = [
+		r'\d+', # sequence of digits
+		r'\D+', # sequence of non-digits
+		r'\w+', # sequence of alphanumeric
+		r'\W+', # sequence of non-alphanumeric (not only alphabets)
+		r'\s+', # sequence of whitespace
+		r'\S+'  # sequence of non-whitespace
+	]
+	test_patterns(patterns, 'This is a prime #1 example!')
+
+
+	print " === Example 13 === "
+
+	# To match the characters that are part of the regular expression syntax,
+	# escape the characters in the search pattern.
+	patterns = [
+		r'\\d\+', # escapes \ and + metacharacters
+		r'\\D\+', # escapes \ and + metacharacters
+		r'\\s\+', # escapes \ and + metacharacters
+		r'\\S\+', # escapes \ and + metacharacters
+		r'\\w\+', # escapes \ and + metacharacters
+		r'\\W\+', # escapes \ and + metacharacters
+	]
+	test_patterns(patterns, r'\d+ \D+ \s+ \S+ \w+ \W+')
+
+
+
+	# D3. Anchoring
+	# Instead of describing the contents of the pattern to match;
+	# you can also specify the relative location in the input text
+	# where the pattern should appear using anchoring instructions.
+	# ^ - start of string or line
+	# $ - end of string or line
+	# \A - start of string
+	# \Z - end of string
+	# \b - empty string at the beginning or end of a word
+	# \B - empty string not at the beginning or end of a word
+	print " === Example 13 === "
+	patterns = [
+		r'^\w+',     # word at start of string
+		r'\A\w+',    # word at start of string
+		r'\w+\S*$',  # word at end of string, with optional punctuation
+		r'\w+\S*\Z', # word at end of string, with optional punctuation
+		r'\w*t\w*',  # word containing 't'
+		r'\bt\w+',   # 't' at start of word
+		r'\w+t\b',   # 't' at end of word
+		r'\Bt\B',    # 't', not start or end of word
+	]
+	test_patterns(patterns, 'This is some text -- with punctuation.')
+
+	# D4. Constraining the Search
+
+	# D4.1
+	# match looks to see if pattern exists at start of text.
+	# search looks to see if pattern exists anywhere in text.
+	print " === Example 14 === "
+	text = 'This is some text -- with punctuation.'
+	pattern = 'is'
+
+	m = re.match(pattern, text)
+	print 'Match: Found', m
+
+	match = re.search(pattern, text)
+	print 'Search: Found %s at %d:%d' % (match.group(), match.start(), match.end())
+
+	# D4.2
+	# The search() method of a compiled regular expression accepts optional start and end position
+	# parameters to limit the search to a substring of the input.
+	print " === Example 15 === "
+	text = 'This is some text -- with punctuation.'
+	pattern = re.compile(r'\b\w*is\w*\b')
+	print 'Text:', text
+	print
+
+	pos = 0
+	while True:
+		match = pattern.search(text, pos)
+		if not match:
+			break
+		s = match.start()
+		e = match.end()
+		print '  %2d : %2d = "%s"' % \
+			(s, e-1, text[s:e])
+		# Move forward in text for the next search
+		pos = e
+
+
+	# E - Dissecting Matches with Groups
+	# E1. use parantheses to group items together.
+	print " === Example 15 === "
+	patterns = [
+		'a(ab)',    # 'a' followed by literal 'ab'
+		'a(a*b*)',  # 'a' followed by 0-n 'a' and 0-n 'b'
+		'a(ab)*',   # 'a' followed by 0-n 'ab'
+		'a(ab)+',   # 'a' followed by 1-n 'ab'
+	]
+	test_patterns(patterns, 'abbaaabbbbaaaaa')
+
+	# E2. To access the substrings matched by the individual groups within a pattern,
+	# 		use the groups() method of the Match objectself.
+	print " === Example 16 === "
+	text = 'This is some text -- with punctuation.'
+	patterns = [ r'^(\w+)',           # word at start of string
+		r'(\w+)\S*$',        # word at end of string, with optional punctuation
+		r'(\bt\w+)\W+(\w+)', # word starting with 't' then another word
+		r'(\w+t)\b',         # word ending with 't'
+	]
+
+	for pattern in patterns:
+		regex = re.compile(pattern)
+		match = regex.search(text)
+		print 'Matching "%s"' % pattern
+		print '  ', match.groups()
+		print
+
+	# E3 - If you are using grouping to find parts of the string; but dont need all
+	# of the parts matched by groups, you can ask for the match of only a single group with group().
+	text = 'This is some text -- with punctuation.'
+	print 'Input text            :', text
+
+	# word starting with 't' then another word
+	regex = re.compile(r'(\bt\w+)\W+(\w+)')
+	print 'Pattern               :', regex.pattern
+
+	match = regex.search(text)
+	print 'Entire match          :', match.group(0)
+	print 'Word starting with "t":', match.group(1)
+	print 'Word after "t" word   :', match.group(2)
+
+	print 'Words in match.groups()   :', match.groups()
+	print 'Word in match.group()   :', match.group()
 
 if __name__ == "__main__":
 	main()
