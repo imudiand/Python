@@ -1,6 +1,7 @@
 
 # https://github.com/zhiwehu/Python-programming-exercises/blob/master/100%2B%20Python%20challenging%20programming%20exercises.txt
 from math import sqrt
+import re
 
 '''
 Question 1:
@@ -407,14 +408,148 @@ Then, the output of the program should be:
 ABd1234@1
 '''
 
+def func18():
+	msg = raw_input("Enter comma-separated passwords ->")
+	msgs = msg.split(',')
+	results = []
+	for pw in msgs:
+		if not re.search('[a-z]', pw):
+			continue
+		if not re.search('[0-9]', pw):
+			continue
+		if not re.search('[A-Z]', pw):
+			continue
+		if not re.search('[$#@]', pw):
+			continue
+		if len(pw) > 12 or len(pw) < 6:
+			continue
+		results.append(pw)
+	print results
+
+'''
+Question 19
+Level 3
+
+Question:
+You are required to write a program to sort the (name, age, height) tuples by ascending order where name
+is string, age and height are numbers. The tuples are input by console. The sort criteria is:
+1: Sort based on name;
+2: Then sort based on age;
+3: Then sort by score.
+The priority is that name > age > score.
+If the following tuples are given as input to the program:
+Tom,19,80
+John,20,90
+Jony,17,91
+Jony,17,93
+Json,21,85
+Then, the output of the program should be:
+[('John', '20', '90'), ('Jony', '17', '91'), ('Jony', '17', '93'), ('Json', '21', '85'), ('Tom', '19', '80')]
+'''
+from operator import itemgetter
+# NOTE: itemgetter is used to enable multiple sort keys.
+def func19():
+	persons = []
+	with open("persons.txt", 'rb') as infile:
+		for line in infile.readlines():
+			persons.append(tuple(line.split(',')))
+
+	print sorted(persons, key=itemgetter(0,1,2))
 
 
+'''
+Question 20
+Level 3
+
+Question:
+Define a class with a generator which can iterate the numbers, which are divisible by 7, between a given range 0 and n.
+'''
+def gen_func(n):
+	for i in xrange(0,n):
+		if i%7 == 0:
+			yield i
+		i += 1
+
+def func20():
+	results = []
+	gen = gen_func(100)
+	for i in gen:
+		results.append(i)
+	print ','.join(map(str, results))
 
 
+'''
+Question 21
+Level 3
+
+Question
+A robot moves in a plane starting from the original point (0,0). The robot can move toward UP, DOWN, LEFT and RIGHT with a given steps.
+The trace of robot movement is shown as the following:
+UP 5
+DOWN 3
+LEFT 3
+RIGHT 2
+The numbers after the direction are steps. Please write a program to compute the distance from current position after a sequence of movement
+and original point. If the distance is a float, then just print the nearest integer.
+Example:
+If the following tuples are given as input to the program:
+UP 5
+DOWN 3
+LEFT 3
+RIGHT 2
+Then, the output of the program should be:
+2
+'''
+def func21():
+	positions = []
+	with open('robot.txt', 'rb') as infile:
+		for line in infile.readlines():
+			positions.append(line.split())
+
+	pos = [0, 0]
+	for position in positions:
+		if position[0] == 'UP':
+			pos[1] += int(position[1])
+		elif position[0] == 'DOWN':
+			pos[1] -= int(position[1])
+		elif position[0] == 'RIGHT':
+			pos[0] += int(position[1])
+		elif position[0] == 'LEFT':
+			pos[0] -= int(position[1])
+
+	distance = int(round(sqrt(abs(pos[0])**2 + abs(pos[1])**2)))
+	print distance
 
 
+'''
+Question 22
+Level 3
 
+Question:
+Write a program to compute the frequency of the words from the input. The output should output after sorting the key alphanumerically. 
+Suppose the following input is supplied to the program:
+New to Python or choosing between Python 2 and Python 3? Read Python 2 or Python 3.
+Then, the output should be:
+2:2
+3.:1
+3?:1
+New:1
+Python:5
+Read:1
+and:1
+between:1
+choosing:1
+or:2
+to:1
+'''
+def func22():
+	msg = raw_input("Enter String ->")
+	words = msg.split()
+	result = {}
+	for w in words:
+		result[w] = result.get(w, 0) + 1
 
+	print result
 
 
 
@@ -454,9 +589,19 @@ def main():
 	func15(9)
 	print "\n --- Question 16 ---"
 	func16()
-	'''
 	print "\n --- Question 17 ---"
 	func17()
+	print "\n --- Question 18 ---"
+	func18()
+	print "\n --- Question 19 ---"
+	func19()
+	print "\n --- Question 20 ---"
+	func20()
+	print "\n --- Question 21 ---"
+	func21()
+	'''
+	print "\n --- Question 22 ---"
+	func22()
 
 if __name__ == "__main__":
 	main()
