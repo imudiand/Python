@@ -122,7 +122,62 @@ def main():
                 ]
 	test_patterns(patterns, 'abbaaabbbbaaaaa')
 
+	print " === Example 7 === "
+	# Disable greedy behaviour by following the repetition metachar
+	# with a ? as below.
+	# Now; for any substring where 0 occurances of b are allowed;
+	# the matched substring doesnt include any b characters.
+	patterns = [
+		'ab*?',     # a followed by zero or more b
+		'ab+?',     # a followed by one or more b
+		'ab??',     # a followed by zero or one b
+		'ab{3}?',   # a followed by three b
+		'ab{2,3}?', # a followed by two to three b
+	]
+	test_patterns(patterns, 'abbaaabbbbaaaaa')
 
+
+	# D2. Character Sets
+	# [] --> match characters in []. Eg: [ab] matches either a OR b
+	# ^ --> ignore characters. Eg: [^-. ] ignores sequences with -, . or a space.
+	# [a-z] --> sequences of lower case letters
+	# [A-Z] --> sequences of upper case letters
+	# [a-zA-Z]+' --> sequences of lower or upper case letters
+	# [A-Z][a-z]+' --> one upper case letter followed by lower case letters
+	# . --> pattern should match any single character in that position
+
+	print " === Example 8 === "
+	patterns = [
+		'[ab]',    # either a or b
+		'a[ab]+',  # a followed by one or more a or b
+		'a[ab]+?', # a followed by one or more a or b, not greedy
+	]
+	test_patterns(patterns, 'abbaaabbbbaaaaa')
+
+	print " === Example 9 === "
+	patterns = [
+		'[^-. ]+',  # sequences without -, ., or space
+	]
+	test_patterns(patterns, 'This is some text -- with punctuation.')
+
+	print " === Example 10 === "
+	patterns = [
+		'[a-z]+',      # sequences of lower case letters
+		'[A-Z]+',      # sequences of upper case letters
+		'[a-zA-Z]+',   # sequences of lower or upper case letters
+		'[A-Z][a-z]+', # one upper case letter followed by lower case letters
+	]
+	test_patterns(patterns, 'This is some text -- with punctuation.')
+
+
+	print " === Example 11 === "
+	patterns = [
+		'a.',   # a followed by any one character
+		'b.',   # b followed by any one character
+		'a.*b', # a followed by anything, ending in b
+		'a.*?b', # a followed by anything (or nothing), ending in b
+	]
+	test_patterns(patterns, 'abbaaabbbbaaaaa')
 
 
 if __name__ == "__main__":
