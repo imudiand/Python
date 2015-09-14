@@ -313,6 +313,7 @@ def main():
 
 	# E3 - If you are using grouping to find parts of the string; but dont need all
 	# of the parts matched by groups, you can ask for the match of only a single group with group().
+	print " === Example 17 === "
 	text = 'This is some text -- with punctuation.'
 	print 'Input text            :', text
 
@@ -320,6 +321,10 @@ def main():
 	regex = re.compile(r'(\bt\w+)\W+(\w+)')
 	print 'Pattern               :', regex.pattern
 
+	# E4.
+	# Group 0 represents the string matched by the entire expression,
+	# and sub-groups are numbered starting with 1 in the order their
+	# left parenthesis appears in the expression.
 	match = regex.search(text)
 	print 'Entire match          :', match.group(0)
 	print 'Word starting with "t":', match.group(1)
@@ -327,6 +332,90 @@ def main():
 
 	print 'Words in match.groups()   :', match.groups()
 	print 'Word in match.group()   :', match.group()
+
+
+	# E5. - Named Groups
+	# Python extends the basic grouping syntax to add named groups.
+	# Using names to refer to groups makes it easier to modify the pattern over time,
+	# without having to also modify the code using the match results.
+	# To set the name of a group, use the syntax (P?<name>pattern).
+	# Use groupdict() to retrieve the dictionary mapping group names to substrings from the match.
+	# Named patterns are included in the ordered sequence returned by groups(), as well.
+	print " === Example 18 === "
+	text = 'This is some text -- with punctuation.'
+	patterns = [
+		r'^(?P<first_word>\w+)',
+		r'(?P<last_word>\w+)\S*$',
+		r'(?P<t_word>\bt\w+)\W+(?P<other_word>\w+)',
+		r'(?P<ends_with_t>\w+t)\b',
+	]
+
+	print text
+	print
+
+	for pattern in patterns:
+		regex = re.compile(pattern)
+		match = regex.search(text)
+		print 'Matching "%s"' % pattern
+		print '  ', match.groups()
+		print '  ', match.groupdict()
+		print
+
+
+	# F - Search Options
+	# You can change the way the matching engine processes an expression using option flags.
+	# The flags can be combined using a bitwise or operation, and passed to compile(), search(),
+	# match(), and other functions that accept a pattern for searching.
+	# The Flags and their abbreviations are:
+	# IGNORECASE	i
+	# MULTILINE	m
+	# DOTALL	s
+	# UNICODE	u
+	# VERBOSE	x
+
+	# F1 - Case-insensitive Matching
+	# re.IGNORECASE - causes literal characters and character ranges in the pattern to match both upper and lower case characters.
+	print " === Example 18 === "
+	text = 'This is some text -- with punctuation.'
+	pattern = r'\bT\w+'
+	with_case = re.compile(pattern)
+	without_case = re.compile(pattern, re.IGNORECASE)
+
+	print 'Text            :', text
+	print 'Pattern         :', pattern
+	print 'Case-sensitive  :', with_case.findall(text)
+	print 'Case-insensitive:', without_case.findall(text)
+
+	# F2 - re.MULTILINE turns on Multiline mode.
+	# With Multiline mode ON - the anchor rules for ^ and $ apply at the beginning and end of each line,
+	# in addition to the entire string.
+	print " === Example 18 === "
+
+	text = 'This is some text -- with punctuation.\nAnd a second line.'
+	pattern = r'(^\w+)|(\w+\S*$)'
+	single_line = re.compile(pattern)
+	multiline = re.compile(pattern, re.MULTILINE)
+
+	print 'Text        :', repr(text)
+	print 'Pattern     :', pattern
+	print 'Single Line :', single_line.findall(text)
+	print 'Multline    :', multiline.findall(text)
+
+	# F3 - re.DOTALL - is another flag related to multiline text.
+	# Normally the dot character . matches everything in the input text except a newline character.
+	# The flag allows dot to match newlines as well.
+	text = 'This is some text -- with punctuation.\nAnd a second line.'
+	pattern = r'.+'
+	no_newlines = re.compile(pattern)
+	dotall = re.compile(pattern, re.DOTALL)
+
+	print 'Text        :', repr(text)
+	print 'Pattern     :', pattern
+	print 'No newlines :', no_newlines.findall(text)
+	print 'Dotall      :', dotall.findall(text)
+
+	# F4 -
+
 
 if __name__ == "__main__":
 	main()
