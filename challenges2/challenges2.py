@@ -64,8 +64,67 @@ def func3():
 	return valid_num
 
 '''
+Question 4
+Square the numbers in string
+'''
+import re
+def func4():
+	string = "1 2 3 4 5 6 7 8 9"
+	square = lambda match: str(int(match.group())**2)
+	print re.sub(r'\d+?', square, string)
+
+
+def func5():
+	htmlstr = """
+		<head>
+			<title>HTML</title>
+		</head>
+		<object type="application/x-flash" 
+			data="your-file.swf" 
+			width="0" height="0">
+			<!-- <param name="movie"  value="your-file.swf" /> -->
+			<param name="quality" value="high"/>
+		</object>
+	"""
+
+	print re.sub("<!--.*-->", "", htmlstr)
 
 '''
+Question:
+You are given a text of N lines. The text contains && and || symbols. 
+Your task is to modify :
+
+&& => and
+|| => or
+Both && and || should have space " " on both sides.
+
+Input Format
+
+First line contains integer, N. 
+Next N lines contains the text.
+
+Constraints
+
+0<N<100
+
+Neither && nor || occur in start or end of each line.
+'''
+def func6():
+	strtext = """
+		a = 1;
+		b = input();
+
+		if a + b > 0 && a - b < 0:
+		    start()
+		elif a*b > 10 || a/b < 1:
+		    stop()
+		print set(list(a)) | set(list(b)) 
+		#Note do not change &&& or ||| or & or |
+		#Only change those '&&' which has space on both sides.
+		#Only change those '|| which has space on both sides.
+	"""
+	res = re.sub("(?<= )&&(?= )", "and", strtext)
+	print re.sub("(?<= )\|\|(?= )", "or", res) # NOTE: | needs escaping unlike &
 
 
 def main():
@@ -81,10 +140,16 @@ def main():
 	print "=== Example 3 === "
 	nums = func3()
 	print "\n".join(nums)
-	'''
 
 	print "=== Example 4 ==="
-	nums = func4()
+	func4()
+
+	print "=== Example 5 ==="
+	func5()
+	
+	print "=== Example 6 ==="
+	func6()
+
 
 
 if __name__ == "__main__":
