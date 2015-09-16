@@ -180,9 +180,57 @@ def func10(num):
 	print res
 	return res
 
+'''
+Question: String Reversal
+'''
+def func11():
+	print "My name is Michele"[::-1]
 
+'''
+Question: Reverse words in a string
+'''
+def func12():
+	words = "My name is Michele".split(' ')
+	print ' '.join(words[::-1])
 
+'''
+Write a password generator in Python. Be creative with how you generate passwords - strong passwords have a mix of
+lowercase letters, uppercase letters, numbers, and symbols. The passwords should be random, generating a new password
+every time the user asks for a new password.
+'''
+def func13():
+	space = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*'
+	passlen = random.randint(8,15)
+	print ''.join(random.sample(space, passlen))
 
+'''
+Time for some fake graphics Let's say we want to draw game boards that look like this
+
+ --- --- --- 
+|   |   |   | 
+ --- --- ---  
+|   |   |   | 
+ --- --- ---  
+|   |   |   | 
+ --- --- ---
+This one is 3x3 (like in tic tac toe). Obviously, they come in many other sizes (8x8 for chess, 19x19 for Go, and many more).
+
+Ask the user what size game board they want to draw, and draw it for them to the screen using Python's print statement.
+def func14():
+	pass
+'''
+def func13():
+	num = raw_input("Enter a num ->")
+
+	match = re.search(r'\d+', num)
+	if not match:
+		return
+	num = int(match.group())
+
+	for i in xrange(num):
+		print ("{0}"*num).format(' ---')
+		print ("{0}"*(num+1)).format('|   ')
+	print ("{0}"*num).format(' ---')
 
 
 def main():
@@ -195,7 +243,10 @@ def main():
 	#func7()
 	#func8()
 	#func9()
-	print func10(5)
+	#print func10(5)
+	#func11()
+	#func12()
+	func13()
 
 if __name__ == "__main__":
 	main()
