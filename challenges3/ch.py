@@ -78,6 +78,15 @@ def func6():
 	else:
 		print "String NOT a palindrome"
 
+'''
+Make a two-player Rock-Paper-Scissors game. (Hint: Ask for player plays (using input), compare them, print out a message of congratulations to the winner, and ask if the players want to start a new game)
+
+Remember the rules:
+
+Rock beats scissors
+Scissors beats paper
+Paper beats rock
+'''
 def func7():
 	
 	logic = {
@@ -111,6 +120,17 @@ def func7():
 		if continue_game.lower() == "n":
 			break
 
+def func8():
+	num = random.randint(0,10)
+	while(True):
+		msg = raw_input("Guess a num b/w 0-9 ->")
+		msg = re.split('\s,',msg)
+		user_num = int(msg[0])
+		if user_num == num:
+			print "You win. The number is: {0}".format(num)
+			break
+		else:
+			print "Try again"
 
 
 def main():
@@ -120,7 +140,7 @@ def main():
 	#func4()
 	#func5()
 	#func6()
-	func7()
-
+	#func7()
+	func8()
 if __name__ == "__main__":
 	main()
