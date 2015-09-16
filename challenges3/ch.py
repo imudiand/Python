@@ -119,18 +119,70 @@ def func7():
 		continue_game = raw_input("Continue Game ? (Y/N) ->")
 		if continue_game.lower() == "n":
 			break
+'''
+Generate a random number between 1 and 9 (including 1 and 9). Ask the user to guess the number, then tell them whether they guessed too low, too high, or exactly right. (Hint: remember to use the user input lessons from the very first exercise)
 
-def func8():
+Extras:
+
+Keep the game going until the user types exit
+Keep track of how many guesses the user has taken, and when the game ends, print this out.
+'''
+def func9():
 	num = random.randint(0,10)
+	guesses = 0
 	while(True):
 		msg = raw_input("Guess a num b/w 0-9 ->")
 		msg = re.split('\s,',msg)
-		user_num = int(msg[0])
+		if msg and msg[0] != '':
+			user_num = int(msg[0])
+		else:
+			return
 		if user_num == num:
 			print "You win. The number is: {0}".format(num)
 			break
+		elif user_num < num:
+			print "Too low. Try again"
 		else:
-			print "Try again"
+			print "Too high. Try again"
+		guesses += 1
+
+	print "You made your guess in %d attempts" % (guesses)
+
+
+'''
+Write a program that asks the user how many Fibonnaci numbers to generate and then generates them.
+Take this opportunity to think about how you can use functions. Make sure to ask the user to enter
+the number of numbers in the sequence to generate.(Hint: The Fibonnaci seqence is a sequence of numbers
+	where the next number in the sequence is the sum of the previous two numbers in the sequence.
+	The sequence looks like this: 1, 1, 2, 3, 5, 8, 13, ..)
+'''
+
+def fib_dec(func):
+	cache = {}
+	def wrapper(num):
+		res = cache.get(num, None)
+		if res:
+			return res
+		cache[num] = func(num)
+		return cache[num]
+	return wrapper
+
+@fib_dec
+def func10(num):
+	if num < 0:
+		print -1
+		return -1
+	if num < 2:
+		print 1
+		return 1
+
+	res = func10(num-1)+func10(num-2)
+	print res
+	return res
+
+
+
+
 
 
 def main():
@@ -141,6 +193,9 @@ def main():
 	#func5()
 	#func6()
 	#func7()
-	func8()
+	#func8()
+	#func9()
+	print func10(5)
+
 if __name__ == "__main__":
 	main()
