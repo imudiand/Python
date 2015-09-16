@@ -56,7 +56,11 @@ def func3():
 	pattern = r"^{0}\.{0}\.{0}\.{0}$".format(num)
 	regex = re.compile(pattern)
 
-	print regex.match(ip_address).groups()
+	match = regex.match(ip_address)
+	if match:
+		print "%s is an ip address" % (match.group())
+	else:
+		print "%s is not an ip address" % (ip_address)
 
 
 def main():
