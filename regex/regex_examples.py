@@ -47,13 +47,22 @@ def func2():
 	print regex.search("work 1-(800) 555.1212 #1234").groups()
 
 
+def func3():
+	""" IP address regex """
+	ip_address = "255.255.255.255"
 
+
+	num = r"([0-9]|[1-9][0-9]|1[0,9]{2}|2[0,4][0,9]|25[0-5])"
+	pattern = r"^{0}\.{0}\.{0}\.{0}$".format(num)
+	regex = re.compile(pattern)
+
+	print regex.match(ip_address).groups()
 
 
 def main():
-	func1()
-	func2()
-
+	#func1()
+	#func2()
+	func3()
 
 if __name__ == "__main__":
 	main()
